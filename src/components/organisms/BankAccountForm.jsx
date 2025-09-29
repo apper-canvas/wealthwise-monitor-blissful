@@ -3,7 +3,7 @@ import Button from '@/components/atoms/Button';
 import Input from '@/components/atoms/Input';
 import Select from '@/components/atoms/Select';
 import Label from '@/components/atoms/Label';
-import Card from '@/components/atoms/Card';
+import { Card } from '@/components/atoms/Card';
 import ApperIcon from '@/components/ApperIcon';
 
 const BankAccountForm = ({ account, onSave, onCancel }) => {
