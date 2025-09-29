@@ -1,63 +1,100 @@
 import { useState, useEffect } from 'react';
 import { budgetService } from '@/services/api/budgetService';
+import { toast } from 'react-toastify';
 
 export const useBudget = () => {
   const [budget, setBudget] = useState(null);
-  const [budgets, setBudgets] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const loadBudget = async () => {
+  const loadActiveBudget = async () => {
+    setLoading(true);
+    setError(null);
     try {
-      setLoading(true);
-      setError('');
-      const [activeBudget, allBudgets] = await Promise.all([
-        budgetService.getActive(),
-        budgetService.getAll()
-      ]);
-      setBudget(activeBudget);
-      setBudgets(allBudgets);
+      const data = await budgetService.getActive();
+      if (data) {
+        // Map database fields to frontend format
+        const mappedBudget = {
+          Id: data.Id,
+          month: data.month_c,
+          year: data.year_c,
+          categories: data.categories,
+          totalBudget: data.total_budget_c,
+          isActive: data.is_active_c
+        };
+        setBudget(mappedBudget);
+      } else {
+        setBudget(null);
+      }
     } catch (err) {
-      setError('Failed to load budget');
+      setError(err.message);
+      console.error('Error loading budget:', err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadBudget();
+    loadActiveBudget();
   }, []);
 
   const createBudget = async (budgetData) => {
-    const newBudget = await budgetService.create(budgetData);
-    setBudget(newBudget);
-    setBudgets(prev => [...prev, newBudget]);
-    return newBudget;
+    try {
+      const newBudget = await budgetService.create(budgetData);
+      // Map database fields to frontend format
+      const mappedBudget = {
+        Id: newBudget.Id,
+        month: newBudget.month_c,
+        year: newBudget.year_c,
+        categories: newBudget.categories,
+        totalBudget: newBudget.total_budget_c,
+        isActive: newBudget.is_active_c
+      };
+      setBudget(mappedBudget);
+      return mappedBudget;
+    } catch (err) {
+      toast.error(`Failed to create budget: ${err.message}`);
+      throw err;
+    }
   };
 
   const updateBudget = async (id, budgetData) => {
-    const updatedBudget = await budgetService.update(id, budgetData);
-    setBudget(updatedBudget);
-    setBudgets(prev => prev.map(b => b.Id === parseInt(id) ? updatedBudget : b));
-    return updatedBudget;
+    try {
+      const updatedBudget = await budgetService.update(id, budgetData);
+      // Map database fields to frontend format
+      const mappedBudget = {
+        Id: updatedBudget.Id,
+        month: updatedBudget.month_c,
+        year: updatedBudget.year_c,
+        categories: updatedBudget.categories,
+        totalBudget: updatedBudget.total_budget_c,
+        isActive: updatedBudget.is_active_c
+      };
+      setBudget(mappedBudget);
+      return mappedBudget;
+    } catch (err) {
+      toast.error(`Failed to update budget: ${err.message}`);
+      throw err;
+    }
   };
 
   const deleteBudget = async (id) => {
-    await budgetService.delete(id);
-    setBudgets(prev => prev.filter(b => b.Id !== parseInt(id)));
-    if (budget && budget.Id === parseInt(id)) {
+    try {
+      await budgetService.delete(id);
       setBudget(null);
+    } catch (err) {
+      toast.error(`Failed to delete budget: ${err.message}`);
+      throw err;
     }
   };
 
   return {
     budget,
-    budgets,
     loading,
     error,
     createBudget,
     updateBudget,
     deleteBudget,
-    refetch: loadBudget
+    refetch: loadActiveBudget
   };
 };

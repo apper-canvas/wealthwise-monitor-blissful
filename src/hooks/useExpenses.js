@@ -1,19 +1,30 @@
 import { useState, useEffect } from 'react';
 import { expenseService } from '@/services/api/expenseService';
+import { toast } from 'react-toastify';
 
 export const useExpenses = () => {
   const [expenses, setExpenses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const loadExpenses = async () => {
+    setLoading(true);
+    setError(null);
     try {
-      setLoading(true);
-      setError('');
       const data = await expenseService.getAll();
-      setExpenses(data);
+      // Map database fields to frontend format
+      const mappedData = data.map(expense => ({
+        Id: expense.Id,
+        amount: expense.amount_c,
+        category: expense.category_c,
+        description: expense.description_c,
+        date: expense.date_c,
+        createdAt: expense.created_at_c
+      }));
+      setExpenses(mappedData);
     } catch (err) {
-      setError('Failed to load expenses');
+      setError(err.message);
+      console.error('Error loading expenses:', err);
     } finally {
       setLoading(false);
     }
@@ -24,22 +35,55 @@ export const useExpenses = () => {
   }, []);
 
   const addExpense = async (expenseData) => {
-    const newExpense = await expenseService.create(expenseData);
-    setExpenses(prev => [newExpense, ...prev]);
-    return newExpense;
+    try {
+      const newExpense = await expenseService.create(expenseData);
+      // Map database fields to frontend format
+      const mappedExpense = {
+        Id: newExpense.Id,
+        amount: newExpense.amount_c,
+        category: newExpense.category_c,
+        description: newExpense.description_c,
+        date: newExpense.date_c,
+        createdAt: newExpense.created_at_c
+      };
+      setExpenses(prev => [mappedExpense, ...prev]);
+      return mappedExpense;
+    } catch (err) {
+      toast.error(`Failed to add expense: ${err.message}`);
+      throw err;
+    }
   };
 
   const updateExpense = async (id, expenseData) => {
-    const updatedExpense = await expenseService.update(id, expenseData);
-    setExpenses(prev => prev.map(expense => 
-      expense.Id === parseInt(id) ? updatedExpense : expense
-    ));
-    return updatedExpense;
+    try {
+      const updatedExpense = await expenseService.update(id, expenseData);
+      // Map database fields to frontend format
+      const mappedExpense = {
+        Id: updatedExpense.Id,
+        amount: updatedExpense.amount_c,
+        category: updatedExpense.category_c,
+        description: updatedExpense.description_c,
+        date: updatedExpense.date_c,
+        createdAt: updatedExpense.created_at_c
+      };
+      setExpenses(prev => 
+        prev.map(expense => expense.Id === id ? mappedExpense : expense)
+      );
+      return mappedExpense;
+    } catch (err) {
+      toast.error(`Failed to update expense: ${err.message}`);
+      throw err;
+    }
   };
 
   const deleteExpense = async (id) => {
-    await expenseService.delete(id);
-    setExpenses(prev => prev.filter(expense => expense.Id !== parseInt(id)));
+    try {
+      await expenseService.delete(id);
+      setExpenses(prev => prev.filter(expense => expense.Id !== id));
+    } catch (err) {
+      toast.error(`Failed to delete expense: ${err.message}`);
+      throw err;
+    }
   };
 
   return {
