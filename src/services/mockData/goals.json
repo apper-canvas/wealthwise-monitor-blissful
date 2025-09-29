@@ -1,0 +1,38 @@
+[
+  {
+    "Id": 1,
+    "name": "Emergency Fund",
+    "targetAmount": 10000.00,
+    "currentAmount": 3500.00,
+    "deadline": "2024-12-31",
+    "priority": 1,
+    "category": "Emergency Fund"
+  },
+  {
+    "Id": 2,
+    "name": "Summer Vacation",
+    "targetAmount": 3000.00,
+    "currentAmount": 1200.00,
+    "deadline": "2024-06-01",
+    "priority": 2,
+    "category": "Vacation"
+  },
+  {
+    "Id": 3,
+    "name": "New Car Down Payment",
+    "targetAmount": 5000.00,
+    "currentAmount": 800.00,
+    "deadline": "2024-09-30",
+    "priority": 2,
+    "category": "Car Purchase"
+  },
+  {
+    "Id": 4,
+    "name": "Master's Degree",
+    "targetAmount": 15000.00,
+    "currentAmount": 2500.00,
+    "deadline": "2025-08-31",
+    "priority": 1,
+    "category": "Education"
+  }
+]

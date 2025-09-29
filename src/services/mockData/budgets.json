@@ -1,0 +1,21 @@
+[
+  {
+    "Id": 1,
+    "month": "January",
+    "year": 2024,
+    "categories": {
+      "Food & Dining": 400.00,
+      "Transportation": 300.00,
+      "Housing": 1200.00,
+      "Utilities": 200.00,
+      "Entertainment": 150.00,
+      "Healthcare": 100.00,
+      "Shopping": 250.00,
+      "Education": 300.00,
+      "Travel": 200.00,
+      "Other": 100.00
+    },
+    "totalBudget": 3200.00,
+    "isActive": true
+  }
+]
