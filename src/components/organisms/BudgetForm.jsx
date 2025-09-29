@@ -55,8 +55,20 @@ const BudgetForm = ({ onSubmit, onCancel, initialData = null }) => {
     }
 
     try {
+// Ensure categories are properly formatted as JSON object
+      const formattedCategories = typeof budgetData.categories === 'string' 
+        ? budgetData.categories.split(',').reduce((acc, item) => {
+            const [category, amount] = item.split(':').map(s => s.trim());
+            if (category && amount) {
+              acc[category] = parseFloat(amount) || 0;
+            }
+            return acc;
+          }, {})
+        : budgetData.categories || {};
+
       const budget = {
         ...budgetData,
+        categories: formattedCategories,
         totalBudget,
         isActive: true,
         Id: initialData?.Id
