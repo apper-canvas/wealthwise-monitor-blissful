@@ -9,13 +9,13 @@ import Dashboard from '@/components/pages/Dashboard';
 import Expenses from '@/components/pages/Expenses';
 import Budget from '@/components/pages/Budget';
 import Goals from '@/components/pages/Goals';
+import BankAccounts from '@/components/pages/BankAccounts';
 import Login from '@/components/pages/Login';
 import Signup from '@/components/pages/Signup';
 import Callback from '@/components/pages/Callback';
 import ErrorPage from '@/components/pages/ErrorPage';
 import ResetPassword from '@/components/pages/ResetPassword';
 import PromptPassword from '@/components/pages/PromptPassword';
-
 export const AuthContext = createContext(null);
 
 function AppContent() {
@@ -125,10 +125,11 @@ function AppContent() {
           <Route path="/error" element={<ErrorPage />} />
           <Route path="/prompt-password/:appId/:emailAddress/:provider" element={<PromptPassword />} />
           <Route path="/reset-password/:appId/:fields" element={<ResetPassword />} />
-          <Route path="/" element={<Dashboard />} />
+<Route path="/" element={<Dashboard />} />
           <Route path="/expenses" element={<Expenses />} />
           <Route path="/budget" element={<Budget />} />
           <Route path="/goals" element={<Goals />} />
+          <Route path="/bank-accounts" element={<BankAccounts />} />
         </Routes>
         
         {isAuthenticated && <BottomNavigation />}

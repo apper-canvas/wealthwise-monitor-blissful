@@ -7,11 +7,12 @@ const BottomNavigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const navItems = [
+const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: 'LayoutDashboard', path: '/' },
     { id: 'expenses', label: 'Expenses', icon: 'Receipt', path: '/expenses' },
     { id: 'budget', label: 'Budget', icon: 'PieChart', path: '/budget' },
-    { id: 'goals', label: 'Goals', icon: 'Target', path: '/goals' }
+    { id: 'goals', label: 'Goals', icon: 'Target', path: '/goals' },
+    { id: 'bank-accounts', label: 'Accounts', icon: 'CreditCard', path: '/bank-accounts' }
   ];
 
   return (
