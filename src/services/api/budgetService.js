@@ -28,9 +28,16 @@ export const budgetService = {
         throw new Error(response.message);
       }
 
-      return (response.data || []).map(budget => ({
+return (response.data || []).map(budget => ({
         ...budget,
-        categories: budget.categories_c ? JSON.parse(budget.categories_c) : {}
+        categories: budget.categories_c ? (() => {
+          try {
+            return JSON.parse(budget.categories_c);
+          } catch (error) {
+            console.error('Failed to parse categories JSON:', error.message, 'Data:', budget.categories_c);
+            return {};
+          }
+        })() : {}
       }));
     } catch (error) {
       console.error("Error fetching budgets:", error?.response?.data?.message || error);
@@ -64,9 +71,16 @@ export const budgetService = {
       }
 
       const budget = response.data;
-      return {
+return {
         ...budget,
-        categories: budget.categories_c ? JSON.parse(budget.categories_c) : {}
+        categories: budget.categories_c ? (() => {
+          try {
+            return JSON.parse(budget.categories_c);
+          } catch (error) {
+            console.error('Failed to parse categories JSON:', error.message, 'Data:', budget.categories_c);
+            return {};
+          }
+        })() : {}
       };
     } catch (error) {
       console.error(`Error fetching budget ${id}:`, error?.response?.data?.message || error);
@@ -106,9 +120,16 @@ export const budgetService = {
       }
 
       const budget = response.data[0];
-      return {
+return {
         ...budget,
-        categories: budget.categories_c ? JSON.parse(budget.categories_c) : {}
+        categories: budget.categories_c ? (() => {
+          try {
+            return JSON.parse(budget.categories_c);
+          } catch (error) {
+            console.error('Failed to parse categories JSON:', error.message, 'Data:', budget.categories_c);
+            return {};
+          }
+        })() : {}
       };
     } catch (error) {
       console.error("Error fetching active budget:", error?.response?.data?.message || error);
@@ -150,8 +171,15 @@ export const budgetService = {
           throw new Error(result.message || 'Failed to create budget');
         }
         return {
-          ...result.data,
-          categories: JSON.parse(result.data.categories_c || '{}')
+...result.data,
+          categories: (() => {
+            try {
+              return JSON.parse(result.data.categories_c || '{}');
+            } catch (error) {
+              console.error('Failed to parse categories JSON:', error.message, 'Data:', result.data.categories_c);
+              return {};
+            }
+          })()
         };
       }
 
@@ -194,8 +222,15 @@ export const budgetService = {
           throw new Error(result.message || 'Failed to update budget');
         }
         return {
-          ...result.data,
-          categories: JSON.parse(result.data.categories_c || '{}')
+...result.data,
+          categories: (() => {
+            try {
+              return JSON.parse(result.data.categories_c || '{}');
+            } catch (error) {
+              console.error('Failed to parse categories JSON:', error.message, 'Data:', result.data.categories_c);
+              return {};
+            }
+          })()
         };
       }
 
