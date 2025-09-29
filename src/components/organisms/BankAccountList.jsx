@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@/components/atoms/Button';
-import Card from '@/components/atoms/Card';
+import { Card } from '@/components/atoms/Card';
 import Empty from '@/components/ui/Empty';
 import ApperIcon from '@/components/ApperIcon';
 import { cn } from '@/utils/cn';
