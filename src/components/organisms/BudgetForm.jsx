@@ -56,11 +56,16 @@ const BudgetForm = ({ onSubmit, onCancel, initialData = null }) => {
 
     try {
 // Ensure categories are properly formatted as JSON object
-      const formattedCategories = typeof budgetData.categories === 'string' 
+const formattedCategories = typeof budgetData.categories === 'string' 
         ? budgetData.categories.split(',').reduce((acc, item) => {
-            const [category, amount] = item.split(':').map(s => s.trim());
-            if (category && amount) {
-              acc[category] = parseFloat(amount) || 0;
+            const trimmedItem = item.trim();
+            const colonIndex = trimmedItem.lastIndexOf(':');
+            if (colonIndex > 0) {
+              const category = trimmedItem.substring(0, colonIndex).trim();
+              const amount = trimmedItem.substring(colonIndex + 1).trim();
+              if (category && amount) {
+                acc[category] = parseFloat(amount) || 0;
+              }
             }
             return acc;
           }, {})
