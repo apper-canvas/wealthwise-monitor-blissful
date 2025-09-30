@@ -34,8 +34,8 @@ const isValidUrl = (string) => {
 
   const isValidPhoneNumber = (phone) => {
     // Basic phone number validation - allows various formats
-    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-    const cleanedPhone = phone.replace(/[\s\-\(\)\.]/g, '');
+const phoneRegex = /^[+]?[1-9][\d]{0,15}$/;
+    const cleanedPhone = phone.replace(/[\s\-().]/g, '');
     return phoneRegex.test(cleanedPhone);
   };
 
