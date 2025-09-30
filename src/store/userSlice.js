@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: null,
@@ -9,13 +9,17 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-setUser: (state, action) => {
+    setUser: (state, action) => {
       state.user = JSON.parse(JSON.stringify(action.payload));
       state.isAuthenticated = !!action.payload;
     },
     updateProfile: (state, action) => {
       if (state.user) {
-        state.user = { ...state.user, ...action.payload };
+        // Merge profile data with existing user data
+        state.user = {
+          ...state.user,
+          ...action.payload
+        };
       }
     },
     clearUser: (state) => {
@@ -25,5 +29,5 @@ setUser: (state, action) => {
   },
 });
 
-export const { setUser, clearUser } = userSlice.actions;
+export const { setUser, clearUser, updateProfile } = userSlice.actions;
 export default userSlice.reducer;
