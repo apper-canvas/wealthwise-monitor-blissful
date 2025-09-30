@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Card from '@/components/atoms/Card';
+import { Card } from '@/components/atoms/Card';
 import Button from '@/components/atoms/Button';
 import FormField from '@/components/molecules/FormField';
 import Input from '@/components/atoms/Input';
