@@ -133,7 +133,7 @@ async create(expenseData) {
     } catch (error) {
       throw new Error(error.message || 'Failed to create expense');
     }
-    try {
+try {
       const { ApperClient } = window.ApperSDK;
       const apperClient = new ApperClient({
         apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
@@ -165,7 +165,7 @@ async create(expenseData) {
         return result.data;
       }
 
-      throw new Error('No result returned from create operation');
+      return null;
     } catch (error) {
       console.error("Error creating expense:", error?.response?.data?.message || error);
       throw error;
