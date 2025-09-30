@@ -5,7 +5,7 @@ import Button from '@/components/atoms/Button';
 import { AuthContext } from '@/App';
 import { toast } from 'react-toastify';
 
-const Header = ({ onAddExpense, userName = "Welcome back" }) => {
+const Header = ({ onAddExpense, userName }) => {
   const { logout } = useContext(AuthContext);
   const { user, isAuthenticated } = useSelector((state) => state.user);
   
@@ -23,7 +23,7 @@ const Header = ({ onAddExpense, userName = "Welcome back" }) => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">WealthWise</h1>
-            <p className="text-primary-100 mt-1">{userName}</p>
+<p className="text-primary-100 mt-1">{userName || user?.name_c || user?.firstName || "Welcome back"}</p>
           </div>
 <div className="flex items-center space-x-3">
             {onAddExpense && (

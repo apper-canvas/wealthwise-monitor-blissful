@@ -10,6 +10,7 @@ import Expenses from '@/components/pages/Expenses';
 import Budget from '@/components/pages/Budget';
 import Goals from '@/components/pages/Goals';
 import BankAccounts from '@/components/pages/BankAccounts';
+import Profile from '@/components/pages/Profile';
 import Login from '@/components/pages/Login';
 import Signup from '@/components/pages/Signup';
 import Callback from '@/components/pages/Callback';
@@ -130,6 +131,7 @@ function AppContent() {
           <Route path="/budget" element={<Budget />} />
           <Route path="/goals" element={<Goals />} />
           <Route path="/bank-accounts" element={<BankAccounts />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
         
         {isAuthenticated && <BottomNavigation />}

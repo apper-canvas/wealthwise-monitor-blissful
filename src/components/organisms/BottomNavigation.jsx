@@ -12,7 +12,8 @@ const navItems = [
     { id: 'expenses', label: 'Expenses', icon: 'Receipt', path: '/expenses' },
     { id: 'budget', label: 'Budget', icon: 'PieChart', path: '/budget' },
     { id: 'goals', label: 'Goals', icon: 'Target', path: '/goals' },
-    { id: 'bank-accounts', label: 'Accounts', icon: 'CreditCard', path: '/bank-accounts' }
+    { id: 'bank-accounts', label: 'Accounts', icon: 'CreditCard', path: '/bank-accounts' },
+    { id: 'profile', label: 'Profile', icon: 'User', path: '/profile' }
   ];
 
   return (
