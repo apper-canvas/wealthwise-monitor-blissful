@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import Card from '@/components/atoms/Card';
+import { Card } from '@/components/atoms/Card';
 import Button from '@/components/atoms/Button';
 import ApperIcon from '@/components/ApperIcon';
 import Loading from '@/components/ui/Loading';
