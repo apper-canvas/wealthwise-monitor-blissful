@@ -65,9 +65,9 @@ export const expenseService = {
       console.error(`Error fetching expense ${id}:`, error?.response?.data?.message || error);
       throw error;
     }
-  },
+},
 
-async create(expenseData) {
+  async create(expenseData) {
     const { ApperClient } = window.ApperSDK;
     const apperClient = new ApperClient({
       apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
@@ -81,12 +81,12 @@ async create(expenseData) {
           amount_c: expenseData.amount,
           category_c: expenseData.category,
           description_c: expenseData.description,
-          expense_date_c: expenseData.date,
+date_c: expenseData.date, // Use correct field name from schema
           created_at_c: new Date().toISOString()
         }]
       };
 
-      const response = await apperClient.createRecord(this.tableName, params);
+      const response = await apperClient.createRecord(tableName, params);
       
       if (!response.success) {
         throw new Error(response.message);
