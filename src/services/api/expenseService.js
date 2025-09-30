@@ -133,43 +133,6 @@ async create(expenseData) {
     } catch (error) {
       throw new Error(error.message || 'Failed to create expense');
     }
-try {
-      const { ApperClient } = window.ApperSDK;
-      const apperClient = new ApperClient({
-        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
-        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
-      });
-
-      const params = {
-        records: [{
-          Name: expenseData.description || 'Expense',
-          amount_c: parseFloat(expenseData.amount),
-          category_c: expenseData.category,
-          description_c: expenseData.description,
-          date_c: expenseData.date,
-          created_at_c: new Date().toISOString()
-        }]
-      };
-
-      const response = await apperClient.createRecord(tableName, params);
-
-      if (!response.success) {
-        throw new Error(response.message);
-      }
-
-      if (response.results && response.results[0]) {
-        const result = response.results[0];
-        if (!result.success) {
-          throw new Error(result.message || 'Failed to create expense');
-        }
-        return result.data;
-      }
-
-      return null;
-    } catch (error) {
-      console.error("Error creating expense:", error?.response?.data?.message || error);
-      throw error;
-    }
   },
 
   async update(id, expenseData) {
