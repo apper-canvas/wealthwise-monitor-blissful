@@ -59,11 +59,11 @@ const BudgetForm = ({ onSubmit, onCancel, initialData = null }) => {
 const formattedCategories = typeof budgetData.categories === 'string' 
         ? budgetData.categories.split(',').reduce((acc, item) => {
             const trimmedItem = item.trim();
-            const colonIndex = trimmedItem.lastIndexOf(':');
+            const colonIndex = trimmedItem.indexOf(':');
             if (colonIndex > 0) {
               const category = trimmedItem.substring(0, colonIndex).trim();
               const amount = trimmedItem.substring(colonIndex + 1).trim();
-              if (category && amount) {
+              if (category && amount && !isNaN(parseFloat(amount))) {
                 acc[category] = parseFloat(amount) || 0;
               }
             }
