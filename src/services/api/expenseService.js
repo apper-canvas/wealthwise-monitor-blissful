@@ -67,7 +67,72 @@ export const expenseService = {
     }
   },
 
-  async create(expenseData) {
+async create(expenseData) {
+    const { ApperClient } = window.ApperSDK;
+    const apperClient = new ApperClient({
+      apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+      apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+    });
+
+    try {
+      // Create expense first
+      const params = {
+        records: [{
+          amount_c: expenseData.amount,
+          category_c: expenseData.category,
+          description_c: expenseData.description,
+          expense_date_c: expenseData.date,
+          created_at_c: new Date().toISOString()
+        }]
+      };
+
+      const response = await apperClient.createRecord(this.tableName, params);
+      
+      if (!response.success) {
+        throw new Error(response.message);
+      }
+
+      const createdExpense = response.results?.[0]?.data;
+      
+      // Try to send SMS notification (non-blocking)
+      try {
+        // Get user's phone number from profile
+        const { profileService } = await import('./profileService');
+        const profile = await profileService.getProfile();
+        
+        if (profile?.phone_number_c) {
+          // Send SMS via Edge function
+          const smsResult = await apperClient.functions.invoke(import.meta.env.VITE_SEND_EXPENSE_SMS, {
+            body: JSON.stringify({
+              phoneNumber: profile.phone_number_c,
+              expenseData: {
+                amount: expenseData.amount,
+                category: expenseData.category,
+                description: expenseData.description,
+                date: expenseData.date
+              }
+            }),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+
+          // Log SMS result for debugging (don't throw on SMS failure)
+          if (smsResult?.success) {
+            console.info('apper_info: SMS notification sent successfully for expense creation');
+          } else {
+            console.info(`apper_info: SMS notification failed for expense creation: ${JSON.stringify(smsResult)}`);
+          }
+        }
+      } catch (smsError) {
+        // Log SMS error but don't fail expense creation
+        console.info(`apper_info: An error occurred sending SMS notification: ${smsError.message}`);
+      }
+
+      return createdExpense;
+    } catch (error) {
+      throw new Error(error.message || 'Failed to create expense');
+    }
     try {
       const { ApperClient } = window.ApperSDK;
       const apperClient = new ApperClient({

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { expenseService } from '@/services/api/expenseService';
-import { toast } from 'react-toastify';
+import { useEffect, useState } from "react";
+import { expenseService } from "@/services/api/expenseService";
+import { toast } from "react-toastify";
 
 export const useExpenses = () => {
   const [expenses, setExpenses] = useState([]);
@@ -34,7 +34,7 @@ export const useExpenses = () => {
     loadExpenses();
   }, []);
 
-  const addExpense = async (expenseData) => {
+const addExpense = async (expenseData) => {
     try {
       const newExpense = await expenseService.create(expenseData);
       // Map database fields to frontend format
@@ -50,6 +50,8 @@ export const useExpenses = () => {
       return mappedExpense;
     } catch (err) {
       toast.error(`Failed to add expense: ${err.message}`);
+      console.error('Error creating expense:', err.message);
+      setError(err.message);
       throw err;
     }
   };
