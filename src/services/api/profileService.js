@@ -12,11 +12,12 @@ const profileService = {
       });
 
       const params = {
-        fields: [
+fields: [
           { field: { Name: "Id" } },
           { field: { Name: "name_c" } },
           { field: { Name: "avatar_url_c" } },
           { field: { Name: "website_c" } },
+          { field: { Name: "phone_number_c" } },
           { field: { Name: "updated_at_c" } },
           { field: { Name: "Owner" } },
           { field: { Name: "CreatedOn" } },
@@ -57,9 +58,10 @@ const profileService = {
       
       // Prepare data with only updateable fields
       const updateData = {
-        name_c: profileData.name_c,
+name_c: profileData.name_c,
         avatar_url_c: profileData.avatar_url_c || null,
         website_c: profileData.website_c || null,
+        phone_number_c: profileData.phone_number_c || null,
         updated_at_c: profileData.updated_at_c || new Date().toISOString()
       };
 

@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-import { Card } from '@/components/atoms/Card';
-import Button from '@/components/atoms/Button';
-import FormField from '@/components/molecules/FormField';
-import Input from '@/components/atoms/Input';
-import ApperIcon from '@/components/ApperIcon';
+import React, { useState } from "react";
+import { Card } from "@/components/atoms/Card";
+import ApperIcon from "@/components/ApperIcon";
+import Profile from "@/components/pages/Profile";
+import Button from "@/components/atoms/Button";
+import Input from "@/components/atoms/Input";
+import FormField from "@/components/molecules/FormField";
 
 const ProfileForm = ({ profile, onSave, onCancel, saving = false }) => {
   const [formData, setFormData] = useState({
-    name_c: profile?.name_c || '',
+name_c: profile?.name_c || '',
     avatar_url_c: profile?.avatar_url_c || '',
     website_c: profile?.website_c || '',
+    phone_number_c: profile?.phone_number_c || '',
   });
   const [errors, setErrors] = useState({});
 
@@ -21,6 +23,22 @@ const ProfileForm = ({ profile, onSave, onCancel, saving = false }) => {
     }
   };
 
+const isValidUrl = (string) => {
+    try {
+      new URL(string);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  };
+
+  const isValidPhoneNumber = (phone) => {
+    // Basic phone number validation - allows various formats
+    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+    const cleanedPhone = phone.replace(/[\s\-\(\)\.]/g, '');
+    return phoneRegex.test(cleanedPhone);
+  };
+
   const validateForm = () => {
     const newErrors = {};
 
@@ -29,7 +47,11 @@ const ProfileForm = ({ profile, onSave, onCancel, saving = false }) => {
     }
 
     if (formData.website_c && !isValidUrl(formData.website_c)) {
-      newErrors.website_c = 'Please enter a valid URL (e.g., https://example.com)';
+      newErrors.website_c = 'Please enter a valid website URL';
+    }
+
+    if (formData.phone_number_c && !isValidPhoneNumber(formData.phone_number_c)) {
+      newErrors.phone_number_c = 'Please enter a valid phone number';
     }
 
     if (formData.avatar_url_c && !isValidUrl(formData.avatar_url_c)) {
@@ -40,17 +62,9 @@ const ProfileForm = ({ profile, onSave, onCancel, saving = false }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const isValidUrl = (string) => {
-    try {
-      new URL(string);
-      return true;
-    } catch (_) {
-      return false;
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
+    
     if (validateForm()) {
       const updateData = {
         ...formData,
@@ -141,6 +155,19 @@ const ProfileForm = ({ profile, onSave, onCancel, saving = false }) => {
           <p className="mt-1 text-xs text-slate-500">
             Your personal or business website
           </p>
+</FormField>
+
+        <FormField
+          label="Phone Number"
+          error={errors.phone_number_c}
+        >
+          <Input
+            type="tel"
+            value={formData.phone_number_c}
+            onChange={(e) => handleChange('phone_number_c', e.target.value)}
+            placeholder="Enter your phone number"
+            className={errors.phone_number_c ? 'border-red-300 focus:border-red-500' : ''}
+          />
         </FormField>
 
         <div className="flex gap-3 pt-4">
